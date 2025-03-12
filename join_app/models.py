@@ -5,11 +5,17 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Task(models.Model):
-    titel = models.CharField(max_length=30)
-    description = models.CharField(max_length=350)
+    PRIORITY_CHOICES = [
+        ('URGENT', 'Urgent'),
+        ('MEDIUM', 'Medium'),
+        ('LOW', 'Low'),
+    ]
+
+    title = models.CharField(max_length=250)
+    description = models.TextField()
     assigned_to = models.CharField(max_length=100)
-    due_date = models.DateField(max_length=100)
-    priority = models.CharField(max_length=100)
+    due_date = models.DateField()
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='MEDIUM')
     category = models.CharField(max_length=100)
     subtask = models.CharField(max_length=100)
 
