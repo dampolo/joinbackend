@@ -9,6 +9,9 @@ class User(models.Model):
     phone = PhoneNumberField(unique=True, blank=False, region="DE")
     avatar_color = models.CharField(max_length=10, default="#000000")
 
+    def __str__(self):
+        return self.name
+
 class Task(models.Model):
     PRIORITY_CHOICES = [
         ('URGENT', 'Urgent'),
@@ -29,6 +32,9 @@ class Task(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     subtask = models.TextField()
     summary_place = models.CharField(max_length=5, default="to-do")
+
+    def __str__(self):
+        return self.title
 
 class Summary(models.Model):
     to_do = models.IntegerField(default=0)
