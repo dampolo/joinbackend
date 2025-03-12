@@ -9,6 +9,8 @@ class User(models.Model):
     phone = PhoneNumberField(unique=True, blank=False, region="DE")
     avatar_color = models.CharField(default="#000000")
 
+
+
 class Task(models.Model):
     PRIORITY_CHOICES = [
         ('URGENT', 'Urgent'),
@@ -21,11 +23,10 @@ class Task(models.Model):
         ('USER_STORY', 'User Story'),        
     ]
 
-
     title = models.CharField(max_length=250)
     description = models.TextField()
-    assigned_to = models.ForeignKey(User)
+    assigned_to = models.ForeignKey(User, on_delete=models.CASCADE)
     due_date = models.DateField()
-    priority = models.CharField(max_length="10", choices=PRIORITY_CHOICES, default='MEDIUM')
-    category = models.CharField(max_length="20", choices=CATEGORY_CHOICES)
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='MEDIUM')
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     subtask = models.TextField()
