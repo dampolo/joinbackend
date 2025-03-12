@@ -21,9 +21,9 @@ class Task(models.Model):
     description = models.TextField()
     assigned_to = models.CharField(max_length=100)
     due_date = models.DateField()
-    priority = models.CharField(choices=PRIORITY_CHOICES, default='MEDIUM')
-    category = models.CharField(choices=PRIORITY_CHOICES, default='TASK')
-    subtask = models.CharField(max_length=100)
+    priority = models.CharField(max_length="10", choices=PRIORITY_CHOICES, default='MEDIUM')
+    category = models.CharField(max_length="20", choices=CATEGORY_CHOICES)
+    subtask = models.TextField()
 
 class Contact(models.Model):
     name = models.CharField(max_length=50, blank=False)
