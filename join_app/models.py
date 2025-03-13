@@ -36,6 +36,12 @@ class Task(models.Model):
     def __str__(self):
         return self.title
 
+class Subtask(models.Model):
+    task = models.ForeignKey(Task)
+    status= models.BooleanField(default=False)
+    description = models.TextField()
+
+
 class Summary(models.Model):
     to_do = models.IntegerField(default=0)
     done = models.IntegerField(default=0)
