@@ -12,7 +12,7 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
 class Task(models.Model):
     PRIORITY_CHOICES = [
@@ -27,10 +27,10 @@ class Task(models.Model):
     ]
 
     BOARD_CHOICES = [
-        ("TO_DO", "to-do"),
-        ("IN_PROGRESS", "in-progress"),
-        ("AWAIT_FEEDBACK", "await-feedback"),
-        ("DONE", "done"),
+        ("TO_DO", "To do"),
+        ("IN_PROGRESS", "In progress"),
+        ("AWAIT_FEEDBACK", "Await feedback"),
+        ("DONE", "Done"),
     ]
 
     title = models.CharField(max_length=250)
@@ -40,13 +40,13 @@ class Task(models.Model):
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='MEDIUM')
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     subtask = models.TextField()
-    board_place = models.CharField(max_length=20, choices=BOARD_CHOICES, default="TO_DO")
+    board = models.CharField(max_length=20, choices=BOARD_CHOICES, default="TO_DO")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
-
+        return f"{self.title} {self.priority}"
+#
 class Subtask(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="task")
     completed= models.BooleanField(default=False)
