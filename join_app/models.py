@@ -8,6 +8,8 @@ class User(models.Model):
     e_mail = models.EmailField(max_length=254, blank=False)
     phone = PhoneNumberField(unique=True, blank=False, region="DE")
     avatar_color = models.CharField(max_length=10, default="#000000")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -32,14 +34,18 @@ class Task(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     subtask = models.TextField()
     summary_place = models.CharField(max_length=20, default="to-do")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
 
 class Subtask(models.Model):
-    task = models.ForeignKey(Task, on_delete=models.CASCADE)
-    status= models.BooleanField(default=False)
-    description = models.TextField()
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="task")
+    completed= models.BooleanField(default=False)
+    description = models.CharField(max_length=250)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Summary(models.Model):
