@@ -37,7 +37,7 @@ class Task(models.Model):
     description = models.TextField()
     assigned_to = models.ManyToManyField(User, related_name="tasks")
     due_date = models.DateField(blank=False)
-    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='MEDIUM')
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default="MEDIUM")
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     board = models.CharField(max_length=20, choices=BOARD_CHOICES, default="TO_DO")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -52,13 +52,3 @@ class Subtask(models.Model):
     description = models.CharField(max_length=250)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-
-class Summary(models.Model):
-    to_do = models.IntegerField(default=0)
-    done = models.IntegerField(default=0)
-    tasks_in_progress = models.IntegerField(default=0)
-    next_task = models.IntegerField(default=0)
-    await_feedback = models.IntegerField(default=0)
-    tasks_on_board = models.IntegerField(default=0)
-
