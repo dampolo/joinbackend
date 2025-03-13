@@ -1,5 +1,6 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
 
@@ -15,31 +16,30 @@ class User(models.Model):
         return f"{self.name}"
 
 class Task(models.Model):
-    PRIORITY_CHOICES = [
-        ("URGENT", "Urgent"),
-        ("MEDIUM", "Medium"),
-        ("LOW", "Low"),
-    ]
-    
-    CATEGORY_CHOICES = [
-        ("TECHNICAL_TASK", "Technical Task"),
-        ("USER_STORY", "User Story"),        
-    ]
+    class PriorityChoices(models.TextChoices):
+        URGENT = "URGENT", _("Urgent")
+        MEDIUM = "MEDIUM", _("Medium")
+        LOW = "LOW", _("Low")
 
-    BOARD_CHOICES = [
-        ("TO_DO", "To do"),
-        ("IN_PROGRESS", "In progress"),
-        ("AWAIT_FEEDBACK", "Await feedback"),
-        ("DONE", "Done"),
-    ]
+
+    class CategoryChoices(models.TextChoices):
+        TECHNICAL_TASK = "TECHNICAL_TASK", _("Technical Task")
+        USER_STORY = "USER_STORY", _("User Story")
+
+
+    class BoardChoices(models.TextChoices):
+        TO_DO = "TO_DO", _("To do")
+        IN_PROGRESS = "IN_PROGRESS", _("In progress")
+        AWAIT_FEEDBACK = "AWAIT_FEEDBACK", _("Await feedback")
+        DONE = "DONE", _("Done")
 
     title = models.CharField(max_length=250)
     description = models.TextField()
     assigned_to = models.ManyToManyField(User, related_name="tasks")
     due_date = models.DateField(blank=False)
-    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default="MEDIUM")
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
-    board = models.CharField(max_length=20, choices=BOARD_CHOICES, default="TO_DO")
+    priority = models.CharField(max_length=10, choices=PriorityChoices, defaul=PriorityChoices.MEDIUM)
+    category = models.CharField(max_length=20, choices=CategoryChoices)
+    board = models.CharField(max_length=20, choices=BoardChoices, default=BoardChoices.TO_DO)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
