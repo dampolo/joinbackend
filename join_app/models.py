@@ -16,18 +16,18 @@ class User(models.Model):
         return f"{self.name}"
 
 class Task(models.Model):
-    class PriorityChoices(models.TextChoices):
+    class Priority(models.TextChoices):
         URGENT = "URGENT", _("Urgent")
         MEDIUM = "MEDIUM", _("Medium")
         LOW = "LOW", _("Low")
 
 
-    class CategoryChoices(models.TextChoices):
+    class Category(models.TextChoices):
         TECHNICAL_TASK = "TECHNICAL_TASK", _("Technical Task")
         USER_STORY = "USER_STORY", _("User Story")
 
 
-    class BoardChoices(models.TextChoices):
+    class Board(models.TextChoices):
         TO_DO = "TO_DO", _("To do")
         IN_PROGRESS = "IN_PROGRESS", _("In progress")
         AWAIT_FEEDBACK = "AWAIT_FEEDBACK", _("Await feedback")
@@ -37,9 +37,9 @@ class Task(models.Model):
     description = models.TextField()
     assigned_to = models.ManyToManyField(User, related_name="tasks")
     due_date = models.DateField(blank=False)
-    priority = models.CharField(max_length=10, choices=PriorityChoices, defaul=PriorityChoices.MEDIUM)
-    category = models.CharField(max_length=20, choices=CategoryChoices)
-    board = models.CharField(max_length=20, choices=BoardChoices, default=BoardChoices.TO_DO)
+    priority = models.CharField(max_length=10, choices=Priority, default=Priority.MEDIUM)
+    category = models.CharField(max_length=20, choices=Category)
+    board = models.CharField(max_length=20, choices=Board, default=Board.TO_DO)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
