@@ -38,7 +38,7 @@ class Task(models.Model):
 
 class Subtask(models.Model):
     task = models.ForeignKey(Task)
-    status= models.BooleanField(default=False)
+    status= models.BooleanField(default=False, on_delete=models.CASCADE)
     description = models.TextField()
 
 
