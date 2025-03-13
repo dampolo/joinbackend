@@ -40,7 +40,7 @@ class Task(models.Model):
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='MEDIUM')
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     subtask = models.TextField()
-    summary_place = models.CharField(max_length=20, choices=BOARD_CHOICES, default="to-do")
+    board_place = models.CharField(max_length=20, choices=BOARD_CHOICES, default="TO_DO")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
