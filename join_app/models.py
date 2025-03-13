@@ -4,8 +4,8 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 class User(models.Model):
-    name = models.CharField(max_length=50, blank=False)
-    e_mail = models.EmailField(max_length=254, blank=False)
+    name = models.CharField(max_length=150, blank=False)
+    email = models.EmailField(unique=True, max_length=254, blank=False)
     phone = PhoneNumberField(unique=True, blank=False, region="DE")
     avatar_color = models.CharField(max_length=10, default="#000000")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -16,14 +16,21 @@ class User(models.Model):
 
 class Task(models.Model):
     PRIORITY_CHOICES = [
-        ('URGENT', 'Urgent'),
-        ('MEDIUM', 'Medium'),
-        ('LOW', 'Low'),
+        ("URGENT", "Urgent"),
+        ("MEDIUM", "Medium"),
+        ("LOW", "Low"),
     ]
     
     CATEGORY_CHOICES = [
-        ('TECHNICAL_TASK', 'Technical Task'),
-        ('USER_STORY', 'User Story'),        
+        ("TECHNICAL_TASK", "Technical Task"),
+        ("USER_STORY", "User Story"),        
+    ]
+
+    BOARD_CHOICES = [
+        ("TO_DO", "to-do"),
+        ("IN_PROGRESS", "in-progress"),
+        ("AWAIT_FEEDBACK", "await-feedback"),
+        ("DONE", "done"),
     ]
 
     title = models.CharField(max_length=250)
@@ -33,7 +40,7 @@ class Task(models.Model):
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='MEDIUM')
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     subtask = models.TextField()
-    summary_place = models.CharField(max_length=20, default="to-do")
+    summary_place = models.CharField(max_length=20, choices=BOARD_CHOICES, default="to-do")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
