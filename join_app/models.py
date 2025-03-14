@@ -47,7 +47,7 @@ class Task(models.Model):
         return f"{self.title} {self.priority}"
 #
 class Subtask(models.Model):
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="task")
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="subtasks")
     completed= models.BooleanField(default=False)
     description = models.CharField(max_length=250)
     created_at = models.DateTimeField(auto_now_add=True)
