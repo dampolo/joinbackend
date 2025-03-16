@@ -79,35 +79,3 @@ class TaskListCreateView(generics.ListCreateAPIView):
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-
-
-# Get a single task:
-@api_view(["GET"])
-def get_tasks(request):
-    if request.method == "GET":
-        tasks = Task.objects.all()
-        serializer = TaskSerializer(tasks, many=True)
-        return Response(serializer.data)
-
-@api_view(["POST"])
-def create_task(request):
-    if request.method == "POST":
-        serializer = TaskSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    else:
-        return Response(serializer.errors)
-
-# Delete user
-@api_view(["GET", "DELETE"])
-def delete_task(request, pk):
-    user = Task.objects.get(pk=pk)
-    serializer = TaskSerializer(user)
-    
-    if request.method == "GET":
-        return Response(serializer.data)
-    
-    if request.method == "DELETE":
-        user.delete()
-        return Response(serializer.data)

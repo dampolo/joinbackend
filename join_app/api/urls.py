@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import get_user, get_users, create_user, delete_user, update_user,\
-                    get_tasks, create_task, delete_task, TaskListCreateView, TaskDetailView
+                TaskListCreateView, TaskDetailView
 
 urlpatterns = [
     path('users/', get_users, name="get_users"),   # Get all users
