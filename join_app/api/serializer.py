@@ -12,7 +12,7 @@ class SubtaskSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(serializers.ModelSerializer):
     assigned_to = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
-    subtasks = SubtaskSerializer(many=True, read_only=True)
+    subtasks = SubtaskSerializer(many=True)
 
     class Meta:
         model = Task
