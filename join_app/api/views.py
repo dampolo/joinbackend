@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
-from .serializer import UserSerializer, TaskSerializer
-from join_app.models import User, Task
+from .serializer import UserSerializer, TaskSerializer, SubtaskSerializer
+from join_app.models import User, Task, Subtask
 
 
 # Get a single user:
@@ -79,3 +79,14 @@ class TaskListCreateView(generics.ListCreateAPIView):
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+
+
+# Handles both GET (list) and POST (create)
+class SubtaskListView(generics.ListCreateAPIView):
+    queryset = Subtask.objects.all()
+    serializer_class = SubtaskSerializer
+
+# Handles GET (single task), PUT/PATCH (update), and DELETE (delete)
+class AddSubtaskView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Subtask.objects.all()
+    serializer_class = SubtaskSerializer
