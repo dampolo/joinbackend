@@ -10,7 +10,7 @@ class SubtaskSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(serializers.ModelSerializer):
     assigned_to = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
-    subtasks = SubtaskSerializer(many=True, read_only=True)
+    subtasks = SubtaskSerializer(many=True)
 
     class Meta:
         model = Task
@@ -23,6 +23,18 @@ class TaskSerializer(serializers.ModelSerializer):
                   "priority",
                   "category",
                   "board"]
+        
+    def create(self, validated_data):
+        subtasks_data = validated_data.pop('subtasks')
+        print(f"Subtasks Data: {subtasks_data}")  # Debugging
+
+        task = Task.objects.create(**validated_data)
+        print(f"Created Task: {task}")  # Debugging
+
+
+        for subtask_data in subtasks_data:
+            Subtask.objects.create(task=task, **subtask_data)
+        return task
 
 
 class UserSerializer(serializers.ModelSerializer):
