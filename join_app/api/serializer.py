@@ -11,7 +11,7 @@ class SubtaskSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(serializers.ModelSerializer):
     assigned_to = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
-    subtasks = serializers.PrimaryKeyRelatedField(many=True, queryset=Subtask.objects.all())
+    subtasks = SubtaskSerializer(many=True)
 
     # subtasks = SubtaskSerializer(many=True)
 
@@ -39,8 +39,28 @@ class TaskSerializer(serializers.ModelSerializer):
 
         for subtask_data in subtasks_data:
             Subtask.objects.create(task=task, **subtask_data)
-
         return task
+    
+    def update(self, instance, validated_data):
+        subtasks_data = validated_data.pop('subtasks', None)
+        assigned_to_data = validated_data.pop('assigned_to', None)
+
+        # Update main Task fields
+        instance = super().update(instance, validated_data)
+
+        # Update ManyToMany field (assigned_to)
+        if assigned_to_data is not None:
+            instance.assigned_to.set(assigned_to_data)
+
+        # Update subtasks
+        if subtasks_data is not None:
+            instance.subtasks.all().delete()  # Remove old subtasks
+            for subtask_data in subtasks_data:
+                Subtask.objects.create(task=instance, **subtask_data)  # Add new subtasks
+
+        return instance
+    
+    
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
