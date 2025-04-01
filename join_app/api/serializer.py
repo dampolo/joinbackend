@@ -1,6 +1,17 @@
 from rest_framework import serializers
 from join_app.models import User, Task, Subtask
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", 
+                  "name", 
+                  "email", 
+                  "phone",
+                  "avatar_color", 
+                  "created_at", 
+                  "updated_at", 
+                  "tasks"]
 
 class SubtaskSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,7 +21,7 @@ class SubtaskSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    assigned_to = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
+    assigned_to = UserSerializer(many=True)
     subtasks = SubtaskSerializer(many=True)
 
     # subtasks = SubtaskSerializer(many=True)
@@ -31,9 +42,6 @@ class TaskSerializer(serializers.ModelSerializer):
         subtasks_data = validated_data.pop('subtasks', [])
         assigned_to_data = validated_data.pop('assigned_to', [])
 
-        print(f"Subtasks Data: {subtasks_data}")  # Debugging
-        print(f"Assigned To Data: {assigned_to_data}")  # Debugging
-
         task = Task.objects.create(**validated_data)
         task.assigned_to.set(assigned_to_data)
 
@@ -41,7 +49,10 @@ class TaskSerializer(serializers.ModelSerializer):
             Subtask.objects.create(task=task, **subtask_data)
         return task
     
+
+    
     def update(self, instance, validated_data):
+
         subtasks_data = validated_data.pop('subtasks', None)
         assigned_to_data = validated_data.pop('assigned_to', None)
 
@@ -60,16 +71,3 @@ class TaskSerializer(serializers.ModelSerializer):
 
         return instance
     
-    
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", 
-                  "name", 
-                  "email", 
-                  "phone",
-                  "avatar_color", 
-                  "created_at", 
-                  "updated_at", 
-                  "tasks"]

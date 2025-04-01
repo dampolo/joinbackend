@@ -79,14 +79,3 @@ class TaskListCreateView(generics.ListCreateAPIView):
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-
-
-# Handles both GET (list) and POST (create)
-class SubtaskListView(generics.ListCreateAPIView):
-    queryset = Subtask.objects.all()
-    serializer_class = SubtaskSerializer
-
-# Handles GET (single task), PUT/PATCH (update), and DELETE (delete)
-class AddSubtaskView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Subtask.objects.all()
-    serializer_class = SubtaskSerializer
