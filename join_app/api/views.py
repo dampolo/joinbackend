@@ -36,14 +36,28 @@ class UsersViewSet(viewsets.ViewSet):
 
 
 class TasksViewSet(viewsets.ViewSet):
-    pass
+    def list(self, request):
+        queryset = Task.objects.all()
+        serializer = TaskSerializer(queryset, many=True)
+        return Response(serializer.data)
 
-# Handles both GET (list) and POST (create)
-class TaskListCreateView(generics.ListCreateAPIView):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
+    def retrieve(self, request, pk=None):
+        queryset = Task.objects.all()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = TaskSerializer(user)
+        return Response(serializer.data)
 
-# Handles GET (single task), PUT/PATCH (update), and DELETE (delete)
-class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
+    def create(self, request):
+        serializer = TaskSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+    
+    def destroy(self, request, pk=None):
+        queryset = Task.objects.all()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = TaskSerializer(user)
+        user.delete()
+        return Response(serializer.data)
