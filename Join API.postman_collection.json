@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "8b3ee22c-455f-4553-9ff7-6d48dd9d8860",
 		"name": "Join API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "25770531"
 	},
 	"item": [
@@ -11,22 +11,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/users/",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"users",
-						""
-					]
-				}
+				"url": "http://127.0.0.1:8000/api/users/"
 			},
 			"response": []
 		},
@@ -36,24 +21,18 @@
 				"auth": {
 					"type": "noauth"
 				},
-				"method": "GET",
+				"method": "POST",
 				"header": [],
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/tasks/",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"tasks",
-						""
-					]
-				}
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Create Task for user 10\",\r\n    \"description\": \"5 task\",\r\n    \"assigned_to\": [\r\n        10, 1\r\n    ],\r\n    \"subtasks\": [],\r\n    \"due_date\": \"2025-04-10\",\r\n    \"priority\": \"URGENT\",\r\n    \"category\": \"USER_STORY\",\r\n    \"board\": \"DONE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8000/api/tasks/"
 			},
 			"response": []
 		}

@@ -21,8 +21,10 @@ class SubtaskSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    # assigned_to = UserSerializer(many=True)
-    assigned_to = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
+    assigned_to = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=User.objects.all()
+    )
     subtasks = SubtaskSerializer(many=True)
 
     class Meta:
@@ -69,4 +71,9 @@ class TaskSerializer(serializers.ModelSerializer):
                 Subtask.objects.create(task=instance, **subtask_data)  # Add new subtasks
 
         return instance
+    
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep["assigned_to"] = [{"id": user.id, "name": user.name} for user in instance.assigned_to.all()]
+        return rep
     

@@ -10,12 +10,14 @@ class UsersViewSet(viewsets.ViewSet):
     def list(self, request):
         queryset = User.objects.all()
         serializer = UserSerializer(queryset, many=True)
+        print("LIST:", serializer.data)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         queryset = User.objects.all()
         user = get_object_or_404(queryset, pk=pk)
         serializer = UserSerializer(user)
+        print("LIST retrieve:", serializer.data)
         return Response(serializer.data)
 
     def create(self, request):
