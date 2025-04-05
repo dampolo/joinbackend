@@ -34,8 +34,8 @@ class UsersViewSet(viewsets.ViewSet):
         return Response(serializer.data)
     
     def update(self, request, pk=None):
-        user = get_object_or_404(Task, pk=pk)
-        serializer = TaskSerializer(user, data=request.data)
+        user = get_object_or_404(User, pk=pk)
+        serializer = UserSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
