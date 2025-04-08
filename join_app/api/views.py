@@ -1,4 +1,5 @@
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404
@@ -43,6 +44,8 @@ class UsersViewSet(viewsets.ViewSet):
 
 
 class TasksViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    
     def list(self, request):
         queryset = Task.objects.all()
         serializer = TaskSerializer(queryset, many=True)
