@@ -15,6 +15,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ["username", "email", "password", "repeated_password"]
         extra_kwargs = {
             "password": {
-                "write_only": True
+                "write_only": True #Only write, you will not see it.
             }
         }
