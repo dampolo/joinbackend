@@ -25,3 +25,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         if pw != repeated_pw:
             raise serializers.ValidationError({"error": "passwords dont watch"})
+        
+        if UserProfile.objects.filter(email=self.validated_data["email"]).exists():
+            raise serializers.ValidationError("This email exists already")
+
+        account = User(username= self.validated_data["username"], email=self.validated_data["email"])
+        account.set_password(pw)
+        return account
