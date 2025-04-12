@@ -18,3 +18,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 "write_only": True #Only write, you will not see it.
             }
         }
+
+    def save(self):
+        pw = self.validated_data["password"]
+        repeated_pw = self.validated_data["repeated_password"]
+
+        if pw != repeated_pw:
+            raise serializers.ValidationError({"error": "passwords dont watch"})
