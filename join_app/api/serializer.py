@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from join_app.models import User, Task, Subtask
+from join_app.models import Contact, Task, Subtask
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Contact
         fields = ["id", 
                   "name", 
                   "email", 
@@ -23,7 +23,7 @@ class SubtaskSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     assigned_to = serializers.PrimaryKeyRelatedField(
         many=True,
-        queryset=User.objects.all()
+        queryset=Contact.objects.all()
     )
     subtasks = SubtaskSerializer(many=True)
 

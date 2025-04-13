@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
 
-class User(models.Model):
+class Contact(models.Model):
     name = models.CharField(max_length=150, blank=False)
     email = models.EmailField(unique=True, max_length=254, blank=False)
     phone = PhoneNumberField(unique=True, blank=False, region="DE")
@@ -35,7 +35,7 @@ class Task(models.Model):
 
     title = models.CharField(max_length=250)
     description = models.TextField()
-    assigned_to = models.ManyToManyField(User, related_name="tasks")
+    assigned_to = models.ManyToManyField(Contact, related_name="tasks")
     due_date = models.DateField(blank=False)
     priority = models.CharField(max_length=10, choices=Priority, default=Priority.MEDIUM)
     category = models.CharField(max_length=20, choices=Category)

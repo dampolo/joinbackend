@@ -4,11 +4,11 @@ from rest_framework.response import Response
 from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404
 from .serializer import UserSerializer, TaskSerializer, SubtaskSerializer
-from join_app.models import User, Task, Subtask
+from join_app.models import Contact, Task, Subtask
 
 
 class UsersViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = Contact.objects.all()
     serializer_class = UserSerializer
 
 class TasksViewSet(viewsets.ModelViewSet):
