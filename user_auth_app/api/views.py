@@ -30,7 +30,6 @@ class RegistrationView(APIView):
                 "username": saved_account.username,
                 "email": saved_account.email
             }
-            # print(data)
         else:
             data=serializer.errors
         return Response(data)
