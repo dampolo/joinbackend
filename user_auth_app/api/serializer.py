@@ -9,7 +9,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = '__all__'
+        fields = "__all__"
 
 class LoginSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,12 +41,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         if pw != repeated_pw:
             raise serializers.ValidationError(
-                {"error": "Passwords dont watch"})
-
-        print(self.validated_data)
+                {"error": "Passwords don't match"})
 
         if User.objects.filter(email=self.validated_data["email"]).exists():
             raise serializers.ValidationError("This email exists already")
+        
+        if Contact.objects.filter(phone=phone).exists():
+            raise serializers.ValidationError("This phone exists already")
 
         account = User(
             username=self.validated_data["username"],
