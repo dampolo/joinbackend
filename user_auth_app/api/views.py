@@ -21,14 +21,13 @@ class CustomLoginView(ObtainAuthToken):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        print(serializer)
-
         data = {}
         if serializer.is_valid():
             user = serializer.validated_data["user"]
             token, created = Token.objects.get_or_create(user=user)
             data = {
                 "token": token.key,
+                "id": user.id,
                 "username": user.username,
                 "email": user.email,
                 "last_name": user.last_name
