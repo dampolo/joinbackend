@@ -6,12 +6,16 @@ class UserSerializer(serializers.ModelSerializer):
         model = Contact
         fields = ["id", 
                   "name", 
-                  "email", 
-                  "phone",
+                  "email",
+                  "phone",           # <- Added here
                   "avatar_color", 
                   "created_at", 
                   "updated_at", 
                   "tasks"]
+        extra_kwargs = {
+            "tasks": {"required": False},
+            "phone": {"required": False}
+        }
 
 class SubtaskSerializer(serializers.ModelSerializer):
     class Meta:

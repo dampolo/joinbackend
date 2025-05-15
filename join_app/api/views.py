@@ -10,9 +10,11 @@ from join_app.models import Contact, Task
 class ContactsViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowAny]
+
 
 class TasksViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowAny]
