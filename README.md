@@ -19,7 +19,7 @@ How to start:
 
 5. Activate your environment:
     - "env/Scripts/activate" or env/Scripts/activate
-    
+
     You should see on the left, next to path (env)
 
 6. You can do pip freeze:
@@ -28,6 +28,6 @@ How to start:
 7. Install all dependencies:
     -pip install -r requirements.txt
 
-8. Please make:
+8. Please make(optional):
     -pip freeze, 
     You should see e.g. Django
