@@ -18,8 +18,12 @@ How to start:
     You will see what you have installed
 
 5. Activate your environment:
+    On Windows
     - "env/Scripts/activate" or env/Scripts/activate
 
+    On macOS/Linux:
+    - source env/bin/activate
+    
     You should see on the left, next to path (env)
 
 6. You can do pip freeze:
