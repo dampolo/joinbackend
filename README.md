@@ -35,3 +35,6 @@ How to start:
 8. Please make(optional):
     -pip freeze, 
     You should see e.g. Django
+
+9. Run the Server (Test the API Locally)
+    - python manage.py runserver
