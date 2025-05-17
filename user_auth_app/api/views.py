@@ -6,6 +6,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework import status
 
 
 class UserProfileList(generics.ListCreateAPIView):
@@ -51,6 +52,6 @@ class RegistrationView(APIView):
                 "username": saved_account.username,
                 "email": saved_account.email
             }
-        else:
-            data=serializer.errors
-        return Response(data)
+        if 'email' in serializer.errors:
+            return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
