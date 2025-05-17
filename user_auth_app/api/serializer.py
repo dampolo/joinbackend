@@ -39,14 +39,16 @@ class RegistrationSerializer(serializers.ModelSerializer):
         pw = self.validated_data["password"]
         repeated_pw = self.validated_data["repeated_password"]
 
+        print(f'DATA: {self.validated_data}')
+
         if pw != repeated_pw:
             raise serializers.ValidationError(
-                {"error": "Passwords don't match"})
+                {"password": "Passwords don't match"})
 
         if User.objects.filter(email=self.validated_data["email"]).exists():
             raise serializers.ValidationError("This email exists already")
         
-        if Contact.objects.filter(phone=phone).exists():
+        if Contact.objects.filter(phone=self.validated_data["phone"]).exists():
             raise serializers.ValidationError("This phone exists already")
 
         account = User(
