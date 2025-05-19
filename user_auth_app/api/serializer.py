@@ -3,7 +3,8 @@ from user_auth_app.models import UserProfile
 from django.contrib.auth.models import User
 from join_app.models import Contact
 from phonenumber_field.modelfields import PhoneNumberField
-
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -33,6 +34,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 "write_only": True  # Only write, you will not see it.
             },
         }
+        
 
     def save(self):
         phone = self.validated_data.pop("phone")
@@ -44,6 +46,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
         if pw != repeated_pw:
             raise serializers.ValidationError(
                 {"password": "Passwords don't match"})
+        
+        try:
+            validate_password(password=pw)
+        except DjangoValidationError as error:
+            raise serializers.ValidationError({"password": error.messages})
 
         if User.objects.filter(email=self.validated_data["email"]).exists():
             raise serializers.ValidationError("This email exists already")
