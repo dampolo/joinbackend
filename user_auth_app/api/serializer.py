@@ -5,6 +5,7 @@ from join_app.models import Contact
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
+from join_app.validators import CustomPhoneValidator
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -34,8 +35,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 "write_only": True  # Only write, you will not see it.
             },
         }
-        
-
+    
+    def validate_phone(self, value):
+        validator = CustomPhoneValidator()
+        return validator.__call__(value)
+    
+    
     def save(self):
         phone = self.validated_data.pop("phone")
         pw = self.validated_data["password"]
