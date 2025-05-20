@@ -38,8 +38,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     
     def validate_phone(self, value):
         validator = CustomPhoneValidator()
-        return validator.__call__(value)
-    
+        return validator(value)
     
     def save(self):
         phone = self.validated_data.pop("phone")
