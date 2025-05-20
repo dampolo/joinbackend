@@ -52,6 +52,13 @@ class RegistrationView(APIView):
                 "username": saved_account.username,
                 "email": saved_account.email
             }
-        if 'email' in serializer.errors:
-            return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            return Response(data, status=status.HTTP_201_CREATED)
+        
+        field_names = [
+            "username", "first_name", "last_name",
+            "email", "password", "repeated_password", "phone"
+        ]
+        for field in field_names:
+            if field in serializer.errors:
+                return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

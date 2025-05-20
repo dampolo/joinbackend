@@ -2,9 +2,9 @@ from rest_framework import serializers
 from user_auth_app.models import UserProfile
 from django.contrib.auth.models import User
 from join_app.models import Contact
-from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.core.validators import MinLengthValidator
 from join_app.validators import CustomPhoneValidator
 
 
@@ -26,6 +26,10 @@ class LoginSerializer(serializers.ModelSerializer):
 class RegistrationSerializer(serializers.ModelSerializer):
     repeated_password = serializers.CharField(write_only=True)
     phone = serializers.CharField(write_only=True)
+    username = serializers.CharField(validators=[MinLengthValidator(3)])
+    first_name = serializers.CharField(validators=[MinLengthValidator(3)])
+    last_name = serializers.CharField(validators=[MinLengthValidator(3)])
+
 
     class Meta:
         model = User
@@ -54,6 +58,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
             validate_password(password=pw)
         except DjangoValidationError as error:
             raise serializers.ValidationError({"password": error.messages})
+        
+        if User.objects.filter(username=self.validated_data["username"]).exists():
+            raise serializers.ValidationError("This username exists already")
 
         if User.objects.filter(email=self.validated_data["email"]).exists():
             raise serializers.ValidationError("This email exists already")
