@@ -5,16 +5,27 @@ from rest_framework import serializers
 
 class CustomPasswordValidator:
     def validate(self, password, user=None):
-        print("CustomPasswordValidator called with:", password)
-        if not re.search(r'[A-Z]', password):
-            raise ValidationError(_("At least one uppercase letter is required."))
-        if not re.search(r'[a-z]', password):
-            raise ValidationError(_("At least one lowercase letter is required."))
-        if not re.search(r'[0-9]', password):
-            raise ValidationError(_("At least one digit is required."))
-        if not re.search(r'[@$!%+\-/*?&]', password):
-            raise ValidationError(_("At least one special character is required (@ $ ! % + - / * ? &)."))
 
+        errors = []
+
+        print(f"Raw password: [{password}]")  # Brackets help visualize spaces
+
+        print("CustomPasswordValidator called with:", password)
+        if len(password) < 10:
+            errors.append(_("Your password must contain at least 10 characters."))
+        if not re.search(r'[A-Z]', password):
+            errors.append(_("At least one uppercase letter is required."))
+        if not re.search(r'[a-z]', password):
+            errors.append(_("At least one lowercase letter is required."))
+        if not re.search(r'[0-9]', password):
+            errors.append(_("At least one digit is required."))
+        if not re.search(r'[@$!%+\-/*?&]', password):
+            errors.append(_("At least one special character is required (@ $ ! % + - / * ? &)."))
+        if re.search(r'\s', password):
+            errors.append(_("Password must not contain any spaces."))        
+        if errors:
+            raise ValidationError(errors)
+        
     def get_help_text(self):
         return _(
             "Dein Passwort:\n"
