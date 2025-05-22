@@ -44,12 +44,14 @@ class RegistrationSerializer(serializers.ModelSerializer):
         
 
     def validate_username(self, value):
+        print()
+        value = value.lower()
         try:
             MinLengthValidator(3)(value)
         except DjangoValidationError as error:
             raise serializers.ValidationError(error.messages)
             # Check uniqueness
-        if User.objects.filter(username=value).exists():
+        if User.objects.filter(username__iexact=value).exists():
             raise serializers.ValidationError("This username exists already.")
         return value
     
@@ -70,7 +72,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return value
     
     def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
+        value = value.lower()
+        if User.objects.filter(email__iexact=value).exists():
             raise serializers.ValidationError("This email exists already.")
         return value
     

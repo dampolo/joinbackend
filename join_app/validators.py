@@ -5,12 +5,7 @@ from rest_framework import serializers
 
 class CustomPasswordValidator:
     def validate(self, password, user=None):
-
         errors = []
-
-        print(f"Raw password: [{password}]")  # Brackets help visualize spaces
-
-        print("CustomPasswordValidator called with:", password)
         if len(password) < 10:
             errors.append(_("Your password must contain at least 10 characters."))
         if not re.search(r'[A-Z]', password):
