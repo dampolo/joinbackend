@@ -55,10 +55,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("This username exists already.")
         return value
     
-    def validate_phone(self, value):
-        validator = CustomPhoneValidator()
-        return validator(value)
-    
     def validate_password(self, value):
         repeated_pw = self.initial_data.get("repeated_password")        
         # Custom complexity validation
@@ -78,6 +74,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return value
     
     def validate_phone(self, value):
+        validator = CustomPhoneValidator()
+        validator(value)
+
         if Contact.objects.filter(phone=value).exists():
             raise serializers.ValidationError("This phone exists already.")
         return value
