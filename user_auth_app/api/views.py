@@ -19,6 +19,7 @@ class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class CustomLoginView(ObtainAuthToken):
     permission_classes = [AllowAny]
+    serializer_class = LoginSerializer
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -33,9 +34,14 @@ class CustomLoginView(ObtainAuthToken):
                 "email": user.email,
                 "last_name": user.last_name
             }
-        else:
-            data=serializer.errors
-        return Response(data)
+            return Response(data, status=status.HTTP_202_ACCEPTED)
+        field_names = [
+            "username", "password"
+        ]
+        for field in field_names:
+            if field in serializer.errors:
+                return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 class RegistrationView(APIView):
     permission_classes = [AllowAny]

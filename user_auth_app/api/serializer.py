@@ -7,6 +7,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.validators import MinLengthValidator
 from join_app.validators import CustomPhoneValidator, CustomPasswordValidator
+from django.contrib.auth import authenticate
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -14,15 +15,23 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = "__all__"
 
-class LoginSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["username", "email"]
-        extra_kwargs = {
-            "username": {
-                "required": False
-            }
-        }
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        username = data.get("username", "").lower()
+        password = data.get("password")
+
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            raise serializers.ValidationError({
+                "detail": "Benutzername oder Passwort ist ungültig."  # <-- your custom message
+            })
+
+        data["user"] = user
+        return data
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, trim_whitespace=False)
@@ -41,10 +50,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 "write_only": True  # Only write, you will not see it.
             },
         }
-        
 
     def validate_username(self, value):
-        print()
         value = value.lower()
         try:
             MinLengthValidator(3)(value)
