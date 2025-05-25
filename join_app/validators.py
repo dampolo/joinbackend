@@ -23,11 +23,13 @@ class CustomPasswordValidator:
         
     def get_help_text(self):
         return _(
-            "Dein Passwort:\n"
-            "- min. 1 Großbuchstabe (A-Z)\n"
-            "- min. 1 Kleinbuchstabe (a-z)\n"
-            "- min. 1 Zahl (0-9)\n"
-            "- min. 1 Sonderzeichen (@ $ ! % + - / * ? &)"
+            "Your password must meet the following requirements:\n"
+            "- At least 10 characters long\n"
+            "- At least one uppercase letter (A-Z)\n"
+            "- At least one lowercase letter (a-z)\n"
+            "- At least one digit (0-9)\n"
+            "- At least one special character (@ $ ! % + - / * ? &)\n"
+            "- No spaces"
         )
 
 class CustomPhoneValidator:
