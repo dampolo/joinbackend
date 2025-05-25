@@ -41,6 +41,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(validators=[MinLengthValidator(3)])
     last_name = serializers.CharField(validators=[MinLengthValidator(3)])
     email = serializers.EmailField()
+    help_text = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -50,6 +51,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 "write_only": True  # Only write, you will not see it.
             },
         }
+
+    def get_help_text(self, obj):
+        return CustomPasswordValidator().get_help_text()
 
     def validate_username(self, value):
         value = value.lower()
