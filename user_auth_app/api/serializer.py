@@ -27,7 +27,7 @@ class LoginSerializer(serializers.Serializer):
 
         if user is None:
             raise serializers.ValidationError({
-                "detail": "Benutzername oder Passwort ist ungültig."  # <-- your custom message
+                "message": "Oops! Wrong password. Please try again."  # <-- your custom message
             })
 
         data["user"] = user
@@ -45,7 +45,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["username", "first_name", "last_name", "email", "password", "repeated_password", "phone"]
+        fields = ["username", "first_name", "last_name", "email", "password", "repeated_password", "phone", "help_text"]
         extra_kwargs = {
             "password": {
                 "write_only": True  # Only write, you will not see it.
