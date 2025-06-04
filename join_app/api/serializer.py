@@ -1,7 +1,10 @@
 from rest_framework import serializers
 from join_app.models import Contact, Task, Subtask
+from join_app.validators import CustomPhoneValidator
 
 class UserSerializer(serializers.ModelSerializer):
+    phone = serializers.CharField(write_only=True)
+
     class Meta:
         model = Contact
         fields = ["id", 
@@ -16,6 +19,15 @@ class UserSerializer(serializers.ModelSerializer):
             "tasks": {"required": False},
             "phone": {"required": False}
         }
+
+    def validate_phone(self, value):
+        validator = CustomPhoneValidator()
+        validator(value)
+
+        if Contact.objects.filter(phone=value).exists():
+            raise serializers.ValidationError("This phone exists already.")
+        return value
+
 
 class SubtaskSerializer(serializers.ModelSerializer):
     class Meta:

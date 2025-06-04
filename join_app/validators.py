@@ -19,7 +19,7 @@ class CustomPasswordValidator:
         if re.search(r'\s', password):
             errors.append(_("Password must not contain any spaces."))        
         if errors:
-            raise ValidationError(errors)
+            raise ValidationError("\n".join(errors))
         
     def get_help_text(self):
         return _(
@@ -38,6 +38,7 @@ class CustomPhoneValidator:
         pattern = re.compile(r'^(?:\+|00)\d{7,15}$')
         if not pattern.match(value):
             raise serializers.ValidationError(
-                "Phone number must be entered in the format: '+4917612121212'. Up to 15 digits allowed."
+                "Phone number must be entered in the format: '+4917612121212'.\n"
+                "Up to 15 digits allowed."
             )
         return value
