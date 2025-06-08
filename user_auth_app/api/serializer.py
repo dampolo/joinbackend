@@ -27,7 +27,7 @@ class LoginSerializer(serializers.Serializer):
 
         if user is None:
             raise serializers.ValidationError({
-                "message": "Oops! Wrong password. Please try again."  # <-- your custom message
+                "message": "Oops! Wrong password or username. Please try again."  # <-- your custom message
             })
 
         data["user"] = user
