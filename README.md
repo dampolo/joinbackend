@@ -1,5 +1,10 @@
 # Join-Backend
-Backend Applicaton for Join
+Backend Applicaton for Join:   
+Website:
+    - https://joinfrontend.damianpoloczek.com/
+
+GitHub:
+    `git clone https://github.com/dampolo/joinfrontend.git`
 
 # Description
 This is a backend project developed with Django 5.2 and Django REST Framework. It provides an API for managing tasks and projects, including functionalities to create, update, delete, and retrieve tasks and subtasks.
@@ -15,7 +20,7 @@ This is a backend project developed with Django 5.2 and Django REST Framework. I
 Make sure you have Python 3.13 or higher and pip installed.
 
 1. Clone the repository:  
-   `git clone https://github.com/dampolo/joinfrontend.git`
+   `git clone https://github.com/dampolo/joinbackend.git`
 
 2. Create and activate a virtual environment with the following commands:  
    `"env/Scripts/activate" or env/Scripts/activate`  
