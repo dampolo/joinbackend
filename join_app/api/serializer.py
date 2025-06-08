@@ -3,7 +3,7 @@ from join_app.models import Contact, Task, Subtask
 from join_app.validators import CustomPhoneValidator
 
 class UserSerializer(serializers.ModelSerializer):
-    phone = serializers.CharField(write_only=True)
+    phone = serializers.CharField(write_only=False)
 
     class Meta:
         model = Contact
@@ -24,7 +24,8 @@ class UserSerializer(serializers.ModelSerializer):
         validator = CustomPhoneValidator()
         validator(value)
 
-        if Contact.objects.filter(phone=value).exists():
+        contact_id = self.instance.id if self.instance else None
+        if Contact.objects.filter(phone=value).exclude(id=contact_id).exists():
             raise serializers.ValidationError("This phone exists already.")
         return value
 

@@ -1,40 +1,61 @@
-# joinbackend
-Task manager inspired by the Kanban System. Backend
+# Join-Backend
+Backend Applicaton for Join
 
-https://github.com/dampolo/joinbackend/
+# Description
+This is a backend project developed with Django 5.2 and Django REST Framework. It provides an API for managing tasks and projects, including functionalities to create, update, delete, and retrieve tasks and subtasks.
 
+## Technologies
+- Django: 5.2
+- Django REST Framework: For API development  
+- SQLite: Standard database (can be configured)  
 
-How to start:
+## Installation
 
-1. You have to install Python
+### Requirements
+Make sure you have Python 3.13 or higher and pip installed.
 
-2. Clone the repository
+1. Clone the repository:  
+   `git clone https://github.com/dampolo/joinfrontend.git`
 
-3. Creat your environment:
-    - python -m venv env
+2. Create and activate a virtual environment with the following commands:  
+   `"env/Scripts/activate" or env/Scripts/activate`  
+   `source env/bin/activate   # On Windows: env\Scriptsctivate`
 
-4. Optional: 
-    -pip freeze
-    You will see what you have installed
+   You should see on the left, next to path (env)
 
-5. Activate your environment:
-    On Windows
-    - "env/Scripts/activate" or env/Scripts/activate
+3. Install the dependencies:  
+   `pip install -r requirements.txt`
 
-    On macOS/Linux:
-    - source env/bin/activate
-    
-    You should see on the left, next to path (env)
+4. Configure the database:  
+   Run the migrations to initialize the database:  
+   `python manage.py migrate`
 
-6. You can do pip freeze:
-    You will see probobly nothing. You have nothing in your environment
+5. Start the development server:  
+   `python manage.py runserver`
 
-7. Install all dependencies:
-    -pip install -r requirements.txt
+## API Endpoints
 
-8. Please make(optional):
-    -pip freeze, 
-    You should see e.g. Django
+### Authentication
+- `POST /auth/registration/`: Register a user  
+- `POST /auth/login/`: Log in a user  
 
-9. Run the Server (Test the API Locally)
-    - python manage.py runserver
+### Task Management
+- `GET /api/tasks/`: Retrieve all tasks  
+- `POST /api/tasks/`: Create a new task  
+- `PATCH /api/tasks/<int:id>/`: Update a specific task  
+- `DELETE /api/tasks/<int:id>/`: Delete a specific task  
+
+### User/Contact Management
+- `GET /api/users/`: Retrieve all tasks  
+- `POST /api/users/`: Create a new task  
+- `PATCH /api/users/<int:id>/`: Update a specific task  
+- `DELETE /api/users/<int:id>/`: Delete a specific task 
+
+## Troubleshooting
+If you encounter issues, check the following:
+
+- Ensure that the database is correctly configured and migrations have been run.
+- Verify the `requirements.txt` for the correct dependency versions.
+
+## Contributors
+Damian Poloczek
