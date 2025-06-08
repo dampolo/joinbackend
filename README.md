@@ -24,7 +24,7 @@ Make sure you have Python 3.13 or higher and pip installed.
 
 2. Create and activate a virtual environment with the following commands:  
    `"env/Scripts/activate" or env/Scripts/activate`  
-   `source env/bin/activate   # On Windows: env\Scriptsctivate`
+   `source env/bin/activate   # On Windows: env/Scripts/activate`
 
    You should see on the left, next to path (env)
 
