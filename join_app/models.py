@@ -1,13 +1,14 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
+
 # Create your models here.
 
 
 class Contact(models.Model):
     name = models.CharField(max_length=150, blank=False)
     email = models.EmailField(unique=True, max_length=254, blank=False)
-    phone = PhoneNumberField(unique=True)
+    phone = PhoneNumberField(unique=False)
     avatar_color = models.CharField(max_length=10, default="#000000")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

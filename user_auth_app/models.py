@@ -4,7 +4,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone = PhoneNumberField(unique=True)
+    phone = PhoneNumberField(unique=False)
 
     def __str__(self):
         return self.user.username

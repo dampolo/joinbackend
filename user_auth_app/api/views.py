@@ -7,7 +7,10 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework import status
-
+from django.contrib.auth.models import User
+from django.utils.crypto import get_random_string
+from phonenumber_field.phonenumber import PhoneNumber
+from join_app.models import Contact
 
 class UserProfileList(generics.ListCreateAPIView):
     queryset = UserProfile.objects.all()
@@ -42,6 +45,51 @@ class CustomLoginView(ObtainAuthToken):
             if field in serializer.errors:
                 return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class GuestLoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        # Create a unique username to avoid duplicates
+        unique_suffix = get_random_string(2)
+        guest_username = f"Guest_{unique_suffix}"
+        guest_email = f"{guest_username.lower()}@guest.local"
+        guest_password = get_random_string(length=12)
+
+
+        # Create the guest user
+        guest_user = User.objects.create_user(
+            username=guest_username,
+            email=guest_email,
+            password=guest_password,
+            first_name="Guest",
+            last_name="User"
+        )
+
+        # Assign a default phone number (can randomize if needed)
+        phone_number = PhoneNumber.from_string("+49123123")  # Adjust format if needed
+
+        # Create profile
+        user_profile = UserProfile.objects.create(user=guest_user, phone=phone_number)
+
+        # Add to contacts
+        Contact.objects.create(
+            name=f"{guest_user.first_name} {guest_user.last_name}",
+            email=guest_user.email,
+            phone=user_profile.phone
+        )
+
+        # Generate token
+        token, _ = Token.objects.get_or_create(user=guest_user)
+
+        return Response({
+            "token": token.key,
+            "id": guest_user.id,
+            "username": guest_user.username,
+            "email": guest_user.email,
+            "is_guest": True,
+        }, status=status.HTTP_201_CREATED)
 
 class RegistrationView(APIView):
     permission_classes = [AllowAny]
