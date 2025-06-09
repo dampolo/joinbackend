@@ -3,6 +3,7 @@ from join_app.models import Contact, Task, Subtask
 from join_app.validators import CustomPhoneValidator
 
 class UserSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
     phone = serializers.CharField(write_only=False)
 
     class Meta:
@@ -31,9 +32,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class SubtaskSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    
     class Meta:
         model = Subtask
-        fields = '__all__'
+        fields = ['id', 'description', 'completed']
         extra_kwargs = {"task": {"required": False}}
 
 
@@ -42,6 +45,7 @@ class TaskSerializer(serializers.ModelSerializer):
         many=True,
         queryset=Contact.objects.all()
     )
+
     subtasks = SubtaskSerializer(many=True)
 
     class Meta:
@@ -50,11 +54,11 @@ class TaskSerializer(serializers.ModelSerializer):
                   "title", 
                   "description", 
                   "assigned_to", 
-                  "subtasks",
                   "due_date",
                   "priority",
                   "category",
-                  "board"]
+                  "board",
+                  "subtasks",]
         
     def create(self, validated_data):
         subtasks_data = validated_data.pop('subtasks', [])
@@ -66,13 +70,11 @@ class TaskSerializer(serializers.ModelSerializer):
         for subtask_data in subtasks_data:
             Subtask.objects.create(task=task, **subtask_data)
         return task
-    
-
-    
+        
     def update(self, instance, validated_data):
-
         subtasks_data = validated_data.pop('subtasks', None)
         assigned_to_data = validated_data.pop('assigned_to', None)
+
 
         # Update main Task fields
         instance = super().update(instance, validated_data)
@@ -81,13 +83,29 @@ class TaskSerializer(serializers.ModelSerializer):
         if assigned_to_data is not None:
             instance.assigned_to.set(assigned_to_data)
 
-        # Update subtasks
+        # Update subtasks (no delete+recreate)
         if subtasks_data is not None:
-            instance.subtasks.all().delete()  # Remove old subtasks
+            existing_subtasks = {sub.id: sub for sub in instance.subtasks.all()}
+            sent_ids = []
+
             for subtask_data in subtasks_data:
-                Subtask.objects.create(task=instance, **subtask_data)  # Add new subtasks
+                subtask_id = subtask_data.get('id', None)
+                if subtask_id and subtask_id in existing_subtasks:
+                    sub = existing_subtasks[subtask_id]
+                    sub.description = subtask_data.get('description', sub.description)
+                    sub.completed = subtask_data.get('completed', sub.completed)
+                    sub.save()
+                    sent_ids.append(subtask_id)
+                else:
+                    new_sub = Subtask.objects.create(task=instance, **subtask_data)
+                    sent_ids.append(new_sub.id)
+        
+        for sub_id in existing_subtasks:
+            if sub_id not in sent_ids:
+                existing_subtasks[sub_id].delete()
 
         return instance
+
     
     def to_representation(self, instance):
         rep = super().to_representation(instance)
