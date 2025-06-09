@@ -20,7 +20,7 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        username = data.get("username", "").lower()
+        username = data.get("username", "")
         password = data.get("password")
 
         user = authenticate(username=username, password=password)
@@ -56,7 +56,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return CustomPasswordValidator().get_help_text()
 
     def validate_username(self, value):
-        value = value.lower()
         try:
             MinLengthValidator(3)(value)
         except DjangoValidationError as error:
