@@ -20,17 +20,16 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        username = data.get("username", "")
+        username = data.get("username", "") # The empty string "" acts as a fallback to avoid errors (like KeyError) and lets the rest of the code work without crashing, even if the username is missing.
         password = data.get("password")
 
         user = authenticate(username=username, password=password)
-
         if user is None:
             raise serializers.ValidationError({
                 "message": "Oops! Wrong password or username. Please try again."  # <-- your custom message
             })
 
-        data["user"] = user
+        data["user"] = user        
         return data
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -84,11 +83,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return value
     
     def validate_phone(self, value):
-        validator = CustomPhoneValidator()
-        validator(value)
-
-        if Contact.objects.filter(phone=value).exists():
-            raise serializers.ValidationError("This phone exists already.")
+        CustomPhoneValidator()(value)
         return value
     
     def save(self):
