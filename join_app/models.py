@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 class Contact(models.Model):
     name = models.CharField(max_length=150, blank=False)
-    email = models.EmailField(unique=True, max_length=254, blank=False)
+    email = models.EmailField(unique=False, max_length=254, blank=False)
     phone = PhoneNumberField(unique=False)
     avatar_color = models.CharField(max_length=10, default="#000000")
     created_at = models.DateTimeField(auto_now_add=True)

@@ -77,10 +77,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return value
     
     def validate_email(self, value):
-        value = value.lower()
-        if User.objects.filter(email__iexact=value).exists():
-            raise serializers.ValidationError("This email exists already.")
-        return value
+        return value.lower()
     
     def validate_phone(self, value):
         CustomPhoneValidator()(value)
