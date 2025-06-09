@@ -85,12 +85,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return value
     
     def validate_phone(self, value):
-        validator = CustomPhoneValidator()
-        validator(value)
-
-        if Contact.objects.filter(phone=value).exists():
-            raise serializers.ValidationError("This phone exists already.")
-        return value
+        CustomPhoneValidator()(value)
     
     def save(self):
         pw = self.validated_data["password"]
