@@ -60,7 +60,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         except DjangoValidationError as error:
             raise serializers.ValidationError(error.messages)
             # Check uniqueness
-        if User.objects.filter(username__iexact=value).exists():
+        if User.objects.filter(username=value).exists():
             raise serializers.ValidationError("This username exists already.")
         return value
     
