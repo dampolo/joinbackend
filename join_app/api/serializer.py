@@ -31,10 +31,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class SubtaskSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    
     class Meta:
         model = Subtask
-        fields = '__all__'
+        fields = ['id', 'description', 'completed']
         extra_kwargs = {"task": {"required": False}}
+
+
 
 
 class TaskSerializer(serializers.ModelSerializer):
